@@ -1,0 +1,70 @@
+import pygame as pg
+import sys
+
+from zayac import Pers
+
+
+def event_check(pers):
+    for event in pg.event.get(): #taking all events
+        if event.type == pg.QUIT:
+            sys.exit() #cloing window
+        elif event.type == pg.KEYDOWN:
+            event_keydown(event, pers)
+        elif event.type == pg.KEYUP:
+            event_keyup(event, pers)
+
+
+def event_keydown(event, pers):
+    if event.key == pg.K_w:
+        pers.mup = True
+
+    if event.key == pg.K_a:
+        pers.mleft = True
+
+    if event.key == pg.K_d:
+        pers.mright = True
+
+    if event.key == pg.K_s:
+        pers.mdown = True
+
+    if event.key == pg.K_r:
+        pers.rotateLeft = True
+        pers.rotation()
+
+
+def event_keyup(event, pers):
+    if event.key == pg.K_w:
+        pers.mup = False
+
+    if event.key == pg.K_a:
+        pers.mleft = False
+
+    if event.key == pg.K_s:
+        pers.mdown = False
+
+    if event.key == pg.K_d:
+        pers.mright = False
+
+    if event.key == pg.K_r:
+        pers.rotateLeft = False
+
+
+
+def run():
+    pg.init()
+    screen = pg.display.set_mode((600, 600))
+    pg.display.set_caption("BOS labirint")
+    bg_colour = (255,255,255)
+    pers = Pers(screen)
+
+    while 1:
+        screen.fill(bg_colour)
+        event_check(pers)
+        pers.pers_update()
+        pers.output()
+        pg.display.flip()
+
+
+run()
+
+
