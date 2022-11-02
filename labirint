@@ -1,0 +1,28 @@
+import pygame as pg
+import cv2
+import numpy
+
+
+class Labyrinth():
+
+    def __init__(self, screen):
+        self.screen = screen
+        self.image = pg.image.load("back_test3.png")
+        self.rect = self.image.get_rect()
+        self.img = cv2.imread("back_test3.png") # cv2
+        self.is_red = False
+
+    def output(self):
+        """drawing background"""
+
+        self.screen.blit(self.image, self.rect)
+
+    def check(self, x, y):
+        (b, g, r) = self.img[x-(self.rect.centerx-400), y-(self.rect.centery-400)]
+
+        if b == 255 or g == 225 or r == 225:
+            self.is_red = False
+        else:
+            self.is_red = True
+
+
