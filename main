@@ -1,70 +1,57 @@
 import pygame as pg
 import sys
+import cv2
+import time
 
-from zayac import Pers
+from model import Pers
+from labirint import Labyrinth
 
 
 def event_check(pers):
-    for event in pg.event.get(): #taking all events
+    for event in pg.event.get():  # taking all events
         if event.type == pg.QUIT:
-            sys.exit() #cloing window
-        elif event.type == pg.KEYDOWN:
-            event_keydown(event, pers)
-        elif event.type == pg.KEYUP:
-            event_keyup(event, pers)
+            sys.exit()  # closing window
+        elif event.type == pg.MOUSEMOTION:
+            event_mouse(event, pers)
 
 
-def event_keydown(event, pers):
-    if event.key == pg.K_w:
-        pers.mup = True
-
-    if event.key == pg.K_a:
-        pers.mleft = True
-
-    if event.key == pg.K_d:
-        pers.mright = True
-
-    if event.key == pg.K_s:
-        pers.mdown = True
-
-    if event.key == pg.K_r:
-        pers.rotateLeft = True
-        pers.rotation()
+def event_mouse(event, pers):
+    pers.mousex = event.pos[0]
+    pers.mousey = event.pos[1]
 
 
-def event_keyup(event, pers):
-    if event.key == pg.K_w:
-        pers.mup = False
+def colour_check(pers, lab):
+    x, y = pers.mousex, pers.mousey
 
-    if event.key == pg.K_a:
-        pers.mleft = False
-
-    if event.key == pg.K_s:
-        pers.mdown = False
-
-    if event.key == pg.K_d:
-        pers.mright = False
-
-    if event.key == pg.K_r:
-        pers.rotateLeft = False
-
+    lab.check(x, y)
+    if lab.is_red:
+        sys.exit()
 
 
 def run():
+
     pg.init()
-    screen = pg.display.set_mode((600, 600))
+    screen = pg.display.set_mode((800, 800))
     pg.display.set_caption("BOS labirint")
-    bg_colour = (255,255,255)
+    bg_colour = (255, 255, 255)
     pers = Pers(screen)
+    lab = Labyrinth(screen)
+    time.sleep(5)
 
     while 1:
         screen.fill(bg_colour)
         event_check(pers)
+
+        # labyrinth
+        lab.output()
+
+        # model
         pers.pers_update()
         pers.output()
+
+        colour_check(pers, lab)
+
         pg.display.flip()
 
 
 run()
-
-
